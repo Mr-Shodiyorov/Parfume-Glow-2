@@ -1,0 +1,194 @@
+.basket {
+    padding-top: 120px;
+}
+
+.basket__title {
+    font-size: 44px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.basket__items {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+
+.basket__content {
+    display: flex;
+    /* flex-direction: column; */
+    gap: 20px;
+}
+
+
+.basket__ml {
+    color: 6B6B6B;
+    font-weight: 300;
+    margin-bottom: 22px;
+}
+
+
+.basket__brand {
+    font-size: 40px;
+    font-weight: 500;
+
+}
+
+.basket__name {
+    font-size: 38px;
+    font-weight: 300;
+}
+
+
+.basket__order {
+    display: flex;
+    /* flex-direction: column; */
+    gap: 20px;
+    justify-content: space-between;
+
+}
+
+.basket__pc {
+    display: flex;
+    justify-content: space-between;
+    gap: 70px;
+
+
+}
+
+
+.basket__count {
+    display: flex;
+    justify-content: space-between;
+
+
+}
+
+
+.basket__counter {
+    display: flex;
+}
+
+.basket__del-or-like button {
+    background-color: transparent;
+}
+
+.basket__how-many {
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.basket__money {
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.basket__new-money {
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.basket__inner-counter {
+    background-color: #ccc;
+    display: flex;
+    border: 1.5px solid #A8A8A8;
+}
+
+.basket__inner-counter button {
+    padding: 10px 15px;
+    font-size: 22px;
+    font-weight: 500;
+
+}
+
+.basket__inner-counter input {
+    padding: 10px;
+    width: 50px;
+    background-color: #E1E1E1;
+    border: none;
+    border-left: 1.5px solid #A8A8A8;
+    text-align: center;
+    border-right: 1.5px solid #A8A8A8;
+
+}
+
+.basket__counter {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.basket__items {
+    padding-bottom: 20px;
+    border-bottom: 1px solid black;
+}
+
+
+.basket__list {
+    width: 100%;
+}
+
+
+.basket__count {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.basket__counter {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.basket__del-or-like {
+    display: flex;
+    gap: 10px;
+}
+
+.basket__del-or-like button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.basket__order {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+
+.basket__items {
+    display: flex;
+    align-items: center;
+    /* end ni olib tashla */
+    justify-content: space-between;
+}
+
+.basket__order {
+    min-width: 320px;
+}
+
+.basket__content {
+    flex: 1;
+}
+
+.basket__order {
+    width: 400px;
+}
+
+.basket__list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.basket__name {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
