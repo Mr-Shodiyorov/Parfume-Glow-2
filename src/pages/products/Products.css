@@ -45,7 +45,6 @@
   margin: 0 auto;
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
-  padding-top: 93px;
 }
 
 /* ─── Sidebar ─────────────────────────────────── */
@@ -54,12 +53,13 @@
   flex-shrink: 0;
   border-right: 1px solid var(--border);
   padding: 28px 24px;
-  position: sticky;
+  position: fixed;
+  top: 93px;
   height: calc(100vh - 93px);
   overflow-y: auto;
   background: #fff;
   scrollbar-width: none;
-  align-self: flex-start;
+  z-index: 10;
 }
 .prd-sidebar::-webkit-scrollbar { display: none; }
 
@@ -272,6 +272,8 @@
   flex: 1;
   min-width: 0;
   padding: 28px 32px;
+  margin-left: var(--sidebar-w);
+  margin-top: 93px;
 }
 
 /* ─── Top bar (search + count) ────────────────── */
@@ -357,11 +359,16 @@
     width: 100%;
     height: auto;
     position: static;
+    margin-top: 93px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
+  .prd-main {
+    margin-left: 0;
+    margin-top: 0;
+    padding: 20px 16px;
+  }
   .prd-grid { grid-template-columns: repeat(2, 1fr); }
-  .prd-main { padding: 20px 16px; }
 }
 
 @media (max-width: 480px) {
