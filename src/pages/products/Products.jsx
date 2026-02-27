@@ -55,7 +55,7 @@ export default function Products() {
   const [sliderMin, setSliderMin] = useState(null);
   const [sliderMax, setSliderMax] = useState(null);
 
-  // Derive dynamic options from products
+  // Derive dynamic options — scan EVERY price entry of EVERY product
   const { minPrice, maxPrice, mlOptions } = useMemo(() => {
     const arr = Array.isArray(productsRaw) ? productsRaw : [];
     let min = Infinity;
@@ -63,13 +63,13 @@ export default function Products() {
     const mlSet = new Set();
 
     arr.forEach((p) => {
-      const entry = getFirstPrice(p.prices);
-      if (entry) {
+      const prices = Array.isArray(p.prices) ? p.prices : [];
+      prices.forEach((entry) => {
         const price = Number(entry.price ?? 0);
         if (price < min) min = price;
         if (price > max) max = price;
         if (entry.ml_sizes != null) mlSet.add(Number(entry.ml_sizes));
-      }
+      });
     });
 
     return {
@@ -84,7 +84,7 @@ export default function Products() {
 
   const toggleMl = (ml) =>
     setSelectedMl((prev) =>
-      prev.includes(ml) ? prev.filter((x) => x !== ml) : [...prev, ml]
+      prev.includes(ml) ? prev.filter((x) => x !== ml) : [...prev, ml],
     );
 
   const resetFilters = () => {
@@ -105,13 +105,24 @@ export default function Products() {
 
       const matchGender = gender === "all" || p.gender === gender;
 
-      const entry = getFirstPrice(p.prices);
-      const price = Number(entry?.price ?? 0);
-      const matchPrice = price >= activeMin && price <= activeMax;
+      const prices = Array.isArray(p.prices) ? p.prices : [];
 
-      const ml = entry?.ml_sizes != null ? Number(entry.ml_sizes) : null;
+      // Price: match if ANY price entry falls within range
+      const matchPrice =
+        prices.length === 0 ||
+        prices.some((entry) => {
+          const price = Number(entry.price ?? 0);
+          return price >= activeMin && price <= activeMax;
+        });
+
+      // ML: match if ANY price entry has a selected ml size
       const matchMl =
-        selectedMl.length === 0 || (ml !== null && selectedMl.includes(ml));
+        selectedMl.length === 0 ||
+        prices.some(
+          (entry) =>
+            entry.ml_sizes != null &&
+            selectedMl.includes(Number(entry.ml_sizes)),
+        );
 
       return matchSearch && matchGender && matchPrice && matchMl;
     });
@@ -124,13 +135,17 @@ export default function Products() {
   ].filter(Boolean).length;
 
   const pctMin =
-    maxPrice > minPrice ? ((activeMin - minPrice) / (maxPrice - minPrice)) * 100 : 0;
+    maxPrice > minPrice
+      ? ((activeMin - minPrice) / (maxPrice - minPrice)) * 100
+      : 0;
   const pctMax =
-    maxPrice > minPrice ? ((activeMax - minPrice) / (maxPrice - minPrice)) * 100 : 100;
+    maxPrice > minPrice
+      ? ((activeMax - minPrice) / (maxPrice - minPrice)) * 100
+      : 100;
 
   return (
     <div className="prd-root">
-        <Header/>
+      <Header/>
       <div className="prd-layout">
         {/* ── Sidebar ── */}
         <aside className="prd-sidebar">
@@ -230,10 +245,31 @@ export default function Products() {
 
         {/* ── Main ── */}
         <main className="prd-main">
-          {/* Search + count */}
+          {/* Back to home + Search + count */}
           <div className="prd-topbar">
+            <Link className="prd-backBtn" to="/">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M19 12H5M5 12l7-7M5 12l7 7" />
+              </svg>
+              Home
+            </Link>
             <div className="prd-searchWrap">
-              <svg className="prd-searchIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="prd-searchIcon"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <circle cx="11" cy="11" r="8" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
@@ -245,7 +281,14 @@ export default function Products() {
               />
               {q && (
                 <button className="prd-searchClear" onClick={() => setQ("")}>
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <path d="M18 6 6 18M6 6l12 12" />
                   </svg>
                 </button>
@@ -277,19 +320,31 @@ export default function Products() {
             <div className="prd-empty">
               <h3>Failed to load products</h3>
               <p>{error?.data?.message || "Something went wrong"}</p>
-              <button className="prd-btn" onClick={refetch}>Retry</button>
+              <button className="prd-btn" onClick={refetch}>
+                Retry
+              </button>
             </div>
           )}
 
           {/* Empty */}
           {!isLoading && !isError && products.length === 0 && (
             <div className="prd-empty">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ccc"
+                strokeWidth="1.5"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
               <h3>No products found</h3>
               <p>Try adjusting your filters or search.</p>
-              <button className="prd-btn" onClick={resetFilters}>Reset filters</button>
+              <button className="prd-btn" onClick={resetFilters}>
+                Reset filters
+              </button>
             </div>
           )}
 
@@ -332,7 +387,9 @@ export default function Products() {
                         <div className="prd-meta">
                           <span className="prd-brand">{p.brand || "—"}</span>
                           <span className="prd-dot">•</span>
-                          <span className={`prd-gender ${p.gender === "men" ? "men" : p.gender === "women" ? "women" : "unisex"}`}>
+                          <span
+                            className={`prd-gender ${p.gender === "men" ? "men" : p.gender === "women" ? "women" : "unisex"}`}
+                          >
                             {genderLabel(p.gender)}
                           </span>
                         </div>
@@ -342,9 +399,13 @@ export default function Products() {
                       </div>
 
                       <div className="prd-priceRow">
-                        <span className="prd-priceMain">{formatMoney(price, p.valute)}</span>
+                        <span className="prd-priceMain">
+                          {formatMoney(price, p.valute)}
+                        </span>
                         {showOld && (
-                          <span className="prd-priceOld">{formatMoney(old, p.valute)}</span>
+                          <span className="prd-priceOld">
+                            {formatMoney(old, p.valute)}
+                          </span>
                         )}
                       </div>
 
@@ -357,17 +418,25 @@ export default function Products() {
                         {p.release_date ? (
                           <span className="prd-pill">{p.release_date}</span>
                         ) : (
-                          <span className="prd-pill prd-pill-muted">No date</span>
+                          <span className="prd-pill prd-pill-muted">
+                            No date
+                          </span>
                         )}
                       </div>
 
                       {p.info && (
-                        <p className="prd-info" title={p.info}>{p.info}</p>
+                        <p className="prd-info" title={p.info}>
+                          {p.info}
+                        </p>
                       )}
 
                       <div className="prd-cardActions">
-                        <button className="prd-btn prd-btn-ghost">Add to cart</button>
-                        <Link className="prd-btn" to={`/details/${p.id}`}>Details</Link>
+                        <button className="prd-btn prd-btn-ghost">
+                          Add to cart
+                        </button>
+                        <Link className="prd-btn" to={`/details/${p.id}`}>
+                          Details
+                        </Link>
                       </div>
                     </div>
                   </article>

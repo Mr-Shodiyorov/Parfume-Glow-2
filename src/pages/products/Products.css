@@ -272,8 +272,31 @@
   flex: 1;
   min-width: 0;
   padding: 28px 32px;
-  margin-left: var(--sidebar-w);
   margin-top: 93px;
+  margin-left: var(--sidebar-w);
+}
+
+.prd-backBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--transition);
+}
+.prd-backBtn:hover {
+  border-color: var(--text);
+  color: var(--text);
+  background: var(--surface);
 }
 
 /* ─── Top bar (search + count) ────────────────── */
@@ -359,13 +382,11 @@
     width: 100%;
     height: auto;
     position: static;
-    margin-top: 93px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
   .prd-main {
     margin-left: 0;
-    margin-top: 0;
     padding: 20px 16px;
   }
   .prd-grid { grid-template-columns: repeat(2, 1fr); }
