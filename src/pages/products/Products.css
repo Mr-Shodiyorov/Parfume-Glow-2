@@ -384,10 +384,12 @@
     position: static;
     border-right: none;
     border-bottom: 1px solid var(--border);
+    margin-top: 93px;
   }
   .prd-main {
     margin-left: 0;
     padding: 20px 16px;
+    margin-top: 0;
   }
   .prd-grid { grid-template-columns: repeat(2, 1fr); }
 }
